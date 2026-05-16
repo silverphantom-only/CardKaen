@@ -1,0 +1,933 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>KAEN PRIVACY | Tarjeta Digital</title>
+
+  <meta name="description" content="KAEN PRIVACY — Privacidad digital, educación tecnológica y conciencia digital para escuelas, familias y organizaciones." />
+  <meta name="theme-color" content="#03050a" />
+
+  <style>
+    :root {
+      --black: #03050a;
+      --black-soft: #070a12;
+      --midnight: #07111f;
+      --midnight-2: #0b1a2e;
+      --silver: #d9e1ec;
+      --silver-soft: #9ba8b8;
+      --muted: #6f7b8d;
+      --violet: #9b5cff;
+      --violet-soft: rgba(155, 92, 255, 0.38);
+      --glass: rgba(255, 255, 255, 0.055);
+      --glass-border: rgba(255, 255, 255, 0.12);
+      --white: #f6f8fb;
+      --radius-xl: 28px;
+      --radius-lg: 22px;
+      --radius-md: 16px;
+      --shadow-deep: 0 30px 90px rgba(0, 0, 0, 0.55);
+      --shadow-soft: 0 18px 50px rgba(0, 0, 0, 0.32);
+      --ease: cubic-bezier(.2,.8,.2,1);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      scroll-behavior: smooth;
+      background: var(--black);
+    }
+
+    body {
+      min-height: 100vh;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      color: var(--white);
+      background:
+        radial-gradient(circle at 50% -8%, rgba(155, 92, 255, 0.20), transparent 28%),
+        radial-gradient(circle at 8% 12%, rgba(40, 94, 150, 0.24), transparent 34%),
+        radial-gradient(circle at 100% 38%, rgba(33, 60, 98, 0.18), transparent 32%),
+        linear-gradient(180deg, #02040a 0%, #050812 42%, #03050a 100%);
+      overflow-x: hidden;
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      background-image:
+        linear-gradient(rgba(255,255,255,0.022) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.018) 1px, transparent 1px);
+      background-size: 58px 58px;
+      mask-image: linear-gradient(to bottom, rgba(0,0,0,.7), transparent 72%);
+      opacity: .42;
+      z-index: 0;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    .page {
+      position: relative;
+      z-index: 2;
+      width: min(100%, 480px);
+      margin: 0 auto;
+      padding: 18px 14px 42px;
+    }
+
+    .ambient-orb {
+      position: absolute;
+      width: 260px;
+      height: 260px;
+      border-radius: 999px;
+      background: radial-gradient(circle, rgba(155,92,255,.16), rgba(19,55,91,.08) 46%, transparent 70%);
+      filter: blur(10px);
+      top: 72px;
+      right: -118px;
+      pointer-events: none;
+    }
+
+    .card-shell {
+      position: relative;
+      overflow: hidden;
+      border: 1px solid rgba(255, 255, 255, .13);
+      border-radius: 34px;
+      background:
+        linear-gradient(180deg, rgba(255,255,255,.082), rgba(255,255,255,.035)),
+        linear-gradient(145deg, rgba(13, 24, 42, .86), rgba(3, 5, 10, .92));
+      box-shadow: var(--shadow-deep);
+      backdrop-filter: blur(24px);
+      -webkit-backdrop-filter: blur(24px);
+    }
+
+    .hero {
+      position: relative;
+      min-height: 590px;
+      padding: 28px 24px 24px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      isolation: isolate;
+    }
+
+    .hero-visual {
+      position: absolute;
+      inset: 0;
+      overflow: hidden;
+      z-index: -1;
+      background: #03050a;
+    }
+
+    .hero-bg {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 58%;
+      object-fit: cover;
+      object-position: center top;
+      opacity: 1;
+      filter: saturate(1.08) contrast(1.04);
+    }
+
+    .hero-overlay {
+      position: absolute;
+      inset: 0;
+      background:
+        linear-gradient(180deg, rgba(3,5,10,.03) 0%, rgba(3,5,10,.12) 24%, rgba(3,5,10,.55) 50%, rgba(3,5,10,.94) 74%, rgba(3,5,10,.98) 100%),
+        radial-gradient(circle at 50% 8%, transparent 0%, rgba(3,5,10,.05) 24%, rgba(3,5,10,.55) 62%, rgba(3,5,10,.9) 100%);
+    }
+
+    .hero-glow {
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(circle at 80% 18%, rgba(155, 92, 255, .18), transparent 30%),
+        radial-gradient(circle at 24% 28%, rgba(38, 96, 150, .18), transparent 28%);
+      pointer-events: none;
+    }
+
+    .topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 18px;
+      position: relative;
+      z-index: 2;
+    }
+
+    .logo-mark {
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .monogram {
+      width: 48px;
+      height: 48px;
+      border-radius: 17px;
+      display: grid;
+      place-items: center;
+      background:
+        linear-gradient(145deg, rgba(255,255,255,.18), rgba(255,255,255,.035)),
+        radial-gradient(circle at 30% 20%, rgba(155,92,255,.28), transparent 38%);
+      border: 1px solid rgba(255,255,255,.14);
+      box-shadow: inset 0 1px 0 rgba(255,255,255,.14), 0 18px 50px rgba(0,0,0,.38);
+      font-size: 18px;
+      letter-spacing: -.08em;
+      font-weight: 700;
+      color: var(--white);
+    }
+
+    .brand-text {
+      display: flex;
+      flex-direction: column;
+      line-height: 1;
+    }
+
+    .brand-text strong {
+      font-size: 15px;
+      letter-spacing: .22em;
+      font-weight: 680;
+    }
+
+    .brand-text span {
+      margin-top: 7px;
+      font-size: 10px;
+      letter-spacing: .28em;
+      color: var(--silver-soft);
+    }
+
+    .status-pill {
+      padding: 9px 11px;
+      border: 1px solid rgba(255,255,255,.12);
+      background: rgba(255,255,255,.045);
+      border-radius: 999px;
+      color: var(--silver-soft);
+      font-size: 10px;
+      letter-spacing: .11em;
+      text-transform: uppercase;
+      white-space: nowrap;
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 2;
+      padding-top: 265px;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      color: var(--silver-soft);
+      font-size: 11px;
+      letter-spacing: .15em;
+      text-transform: uppercase;
+      margin-bottom: 16px;
+    }
+
+    .eyebrow::before {
+      content: "";
+      width: 7px;
+      height: 7px;
+      border-radius: 999px;
+      background: var(--violet);
+      box-shadow: 0 0 24px rgba(155,92,255,.88);
+    }
+
+    h1 {
+      font-size: clamp(46px, 14vw, 68px);
+      line-height: .94;
+      letter-spacing: -.075em;
+      font-weight: 730;
+      max-width: 10ch;
+      text-wrap: balance;
+    }
+
+    .role {
+      margin-top: 18px;
+      color: var(--silver);
+      font-size: 15px;
+      line-height: 1.55;
+      max-width: 30ch;
+    }
+
+    .signature-line {
+      margin-top: 20px;
+      color: var(--silver-soft);
+      font-size: 14px;
+      line-height: 1.6;
+      max-width: 34ch;
+    }
+
+    .trust-panel {
+      position: relative;
+      z-index: 2;
+      margin-top: 28px;
+      border: 1px solid rgba(255,255,255,.11);
+      background: rgba(255,255,255,.052);
+      border-radius: 22px;
+      padding: 15px;
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+    }
+
+    .trust-panel p {
+      color: var(--silver-soft);
+      font-size: 12px;
+      line-height: 1.5;
+    }
+
+    .section {
+      position: relative;
+      padding: 24px;
+      border-top: 1px solid rgba(255,255,255,.08);
+    }
+
+    .section-title {
+      display: flex;
+      align-items: end;
+      justify-content: space-between;
+      gap: 18px;
+      margin-bottom: 16px;
+    }
+
+    .section-title h2 {
+      font-size: 12px;
+      letter-spacing: .18em;
+      text-transform: uppercase;
+      color: var(--silver);
+      font-weight: 620;
+    }
+
+    .section-title span {
+      font-size: 11px;
+      color: var(--muted);
+    }
+
+    .actions-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 11px;
+    }
+
+    .action {
+      min-height: 78px;
+      padding: 16px;
+      border-radius: 22px;
+      border: 1px solid rgba(255,255,255,.105);
+      background:
+        linear-gradient(180deg, rgba(255,255,255,.072), rgba(255,255,255,.036));
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      transition: transform .35s var(--ease), border-color .35s var(--ease), background .35s var(--ease);
+      overflow: hidden;
+      position: relative;
+    }
+
+    .action::after {
+      content: "";
+      position: absolute;
+      inset: auto -20% -60% auto;
+      width: 90px;
+      height: 90px;
+      border-radius: 999px;
+      background: rgba(155,92,255,.13);
+      filter: blur(10px);
+      opacity: 0;
+      transition: opacity .35s var(--ease);
+    }
+
+    .action:hover {
+      transform: translateY(-3px);
+      border-color: rgba(217,225,236,.24);
+      background: linear-gradient(180deg, rgba(255,255,255,.095), rgba(255,255,255,.045));
+    }
+
+    .action:hover::after {
+      opacity: 1;
+    }
+
+    .action strong {
+      font-size: 14px;
+      font-weight: 620;
+      letter-spacing: -.015em;
+    }
+
+    .action span {
+      margin-top: 12px;
+      color: var(--silver-soft);
+      font-size: 11px;
+      line-height: 1.35;
+    }
+
+    .action.primary {
+      grid-column: span 2;
+      min-height: 88px;
+      background:
+        linear-gradient(120deg, rgba(217,225,236,.18), rgba(155,92,255,.12) 48%, rgba(255,255,255,.04)),
+        rgba(255,255,255,.045);
+      border-color: rgba(217,225,236,.18);
+    }
+
+    .about-copy {
+      color: var(--silver-soft);
+      font-size: 15px;
+      line-height: 1.78;
+      letter-spacing: -.01em;
+    }
+
+    .about-copy strong {
+      color: var(--white);
+      font-weight: 580;
+    }
+
+    .services-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 10px;
+    }
+
+    .service {
+      display: grid;
+      grid-template-columns: auto 1fr;
+      gap: 13px;
+      padding: 16px;
+      border-radius: 20px;
+      border: 1px solid rgba(255,255,255,.095);
+      background: rgba(255,255,255,.041);
+      transition: transform .35s var(--ease), border-color .35s var(--ease);
+    }
+
+    .service:hover {
+      transform: translateY(-2px);
+      border-color: rgba(155,92,255,.25);
+    }
+
+    .service-icon {
+      width: 34px;
+      height: 34px;
+      border-radius: 13px;
+      display: grid;
+      place-items: center;
+      background:
+        radial-gradient(circle at 30% 20%, rgba(155,92,255,.28), transparent 35%),
+        rgba(255,255,255,.06);
+      border: 1px solid rgba(255,255,255,.10);
+      color: var(--silver);
+      font-size: 12px;
+      font-weight: 650;
+    }
+
+    .service h3 {
+      font-size: 14px;
+      font-weight: 610;
+      letter-spacing: -.01em;
+      margin-bottom: 5px;
+    }
+
+    .service p {
+      color: var(--silver-soft);
+      font-size: 12px;
+      line-height: 1.48;
+    }
+
+    .presence {
+      border-radius: 26px;
+      border: 1px solid rgba(255,255,255,.11);
+      background:
+        linear-gradient(180deg, rgba(255,255,255,.062), rgba(255,255,255,.032)),
+        radial-gradient(circle at 90% 8%, rgba(155,92,255,.16), transparent 30%);
+      padding: 20px;
+      box-shadow: var(--shadow-soft);
+    }
+
+    .presence-kicker {
+      font-size: 11px;
+      letter-spacing: .16em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 14px;
+    }
+
+    .presence h3 {
+      font-size: 23px;
+      line-height: 1.12;
+      letter-spacing: -.05em;
+      font-weight: 690;
+      max-width: 15ch;
+      margin-bottom: 14px;
+    }
+
+    .presence p {
+      color: var(--silver-soft);
+      font-size: 13px;
+      line-height: 1.65;
+    }
+
+    .proof-row {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+      margin-top: 18px;
+    }
+
+    .proof-item {
+      padding: 13px 10px;
+      border-radius: 17px;
+      background: rgba(255,255,255,.045);
+      border: 1px solid rgba(255,255,255,.09);
+      min-height: 76px;
+    }
+
+    .proof-item strong {
+      display: block;
+      font-size: 15px;
+      margin-bottom: 8px;
+    }
+
+    .proof-item span {
+      display: block;
+      color: var(--silver-soft);
+      font-size: 10px;
+      line-height: 1.35;
+    }
+
+    .final-cta {
+      padding: 28px 24px 30px;
+      border-top: 1px solid rgba(255,255,255,.08);
+      background:
+        radial-gradient(circle at 50% 0%, rgba(155,92,255,.15), transparent 28%),
+        linear-gradient(180deg, rgba(255,255,255,.02), rgba(255,255,255,.055));
+      text-align: center;
+    }
+
+    .final-cta h2 {
+      font-size: 31px;
+      line-height: 1.02;
+      letter-spacing: -.06em;
+      font-weight: 720;
+      margin-bottom: 14px;
+      text-wrap: balance;
+    }
+
+    .final-cta p {
+      color: var(--silver-soft);
+      font-size: 14px;
+      line-height: 1.65;
+      max-width: 31ch;
+      margin: 0 auto 20px;
+    }
+
+    .cta-button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+      min-height: 58px;
+      padding: 0 20px;
+      border-radius: 20px;
+      background:
+        linear-gradient(135deg, rgba(246,248,251,.92), rgba(173,186,204,.86));
+      color: #050812;
+      font-size: 14px;
+      font-weight: 680;
+      letter-spacing: -.01em;
+      box-shadow: 0 18px 60px rgba(217,225,236,.12), inset 0 1px 0 rgba(255,255,255,.7);
+      transition: transform .35s var(--ease), box-shadow .35s var(--ease);
+    }
+
+    .cta-button:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 22px 70px rgba(217,225,236,.18), inset 0 1px 0 rgba(255,255,255,.75);
+    }
+
+    .footer-note {
+      margin-top: 18px;
+      color: var(--muted);
+      font-size: 10px;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+    }
+
+    .floating-save {
+      position: sticky;
+      bottom: 14px;
+      z-index: 5;
+      margin-top: 14px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+
+    .utility-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 48px;
+      padding: 0 14px;
+      border-radius: 18px;
+      border: 1px solid rgba(255,255,255,.12);
+      background: rgba(7, 10, 18, .72);
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+      color: var(--silver);
+      font-size: 12px;
+      font-weight: 560;
+      box-shadow: 0 16px 40px rgba(0,0,0,.28);
+    }
+
+    .reveal {
+      opacity: 0;
+      transform: translateY(16px);
+      animation: reveal .8s var(--ease) forwards;
+    }
+
+    .delay-1 { animation-delay: .12s; }
+    .delay-2 { animation-delay: .24s; }
+    .delay-3 { animation-delay: .36s; }
+    .delay-4 { animation-delay: .48s; }
+
+    @keyframes reveal {
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @media (max-width: 380px) {
+      .page {
+        padding-inline: 10px;
+      }
+
+      .hero {
+        padding: 24px 20px 22px;
+        min-height: 570px;
+      }
+
+      .hero-content {
+        padding-top: 245px;
+      }
+
+      .section {
+        padding: 22px 20px;
+      }
+
+      .brand-text strong {
+        letter-spacing: .17em;
+      }
+
+      .status-pill {
+        display: none;
+      }
+
+      .proof-row {
+        grid-template-columns: 1fr;
+      }
+
+      .action.primary {
+        grid-column: span 1;
+      }
+
+      .actions-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (min-width: 481px) {
+      .page {
+        padding-top: 28px;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: .001ms !important;
+        animation-iteration-count: 1 !important;
+        scroll-behavior: auto !important;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <main class="page">
+    <div class="ambient-orb" aria-hidden="true"></div>
+
+    <article class="card-shell reveal">
+
+      <!-- HERO -->
+      <section class="hero">
+        <div class="hero-visual" aria-hidden="true">
+          <!-- 
+            IMPORTANTE:
+            Guarda tu imagen del águila/logo como:
+            assets/kaen-hero.png
+          -->
+          <img src="assets/kaen-hero.png" alt="" class="hero-bg">
+          <div class="hero-overlay"></div>
+          <div class="hero-glow"></div>
+        </div>
+
+        <header class="topbar reveal delay-1">
+          <div class="logo-mark" aria-label="KAEN PRIVACY">
+            <div class="monogram">K</div>
+            <div class="brand-text">
+              <strong>KAEN</strong>
+              <span>PRIVACY</span>
+            </div>
+          </div>
+
+          <div class="status-pill">Digital Education</div>
+        </header>
+
+        <div class="hero-content reveal delay-2">
+          <div class="eyebrow">Privacidad digital estratégica</div>
+
+          <h1>KAEN</h1>
+
+          <p class="role">
+            Estrategia en privacidad digital, educación tecnológica y conciencia digital.
+          </p>
+
+          <p class="signature-line">
+            Talleres y programas para escuelas, familias y organizaciones que quieren construir una cultura digital más consciente.
+          </p>
+
+          <div class="trust-panel">
+            <p>
+              Experiencias educativas diseñadas para convertir la privacidad digital en criterio práctico, humano y aplicable.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- QUICK ACTIONS -->
+      <section class="section reveal delay-2" id="acciones">
+        <div class="section-title">
+          <h2>Acciones rápidas</h2>
+          <span>Conecta</span>
+        </div>
+
+        <div class="actions-grid">
+
+          <!-- EDITAR: cambia el número por tu WhatsApp real -->
+          <a
+            class="action primary"
+            href="https://wa.me/5210000000000?text=Hola%20KAEN%20PRIVACY,%20me%20interesa%20conocer%20sus%20talleres"
+            target="_blank"
+            rel="noopener"
+          >
+            <strong>WhatsApp</strong>
+            <span>Iniciar conversación directa</span>
+          </a>
+
+          <!-- EDITAR: cambia por tu Instagram real -->
+          <a
+            class="action"
+            href="https://instagram.com/kaenprivacy"
+            target="_blank"
+            rel="noopener"
+          >
+            <strong>Instagram</strong>
+            <span>Contenido y presencia digital</span>
+          </a>
+
+          <!-- EDITAR: cambia por tu sitio web real -->
+          <a
+            class="action"
+            href="https://kaenprivacy.com"
+            target="_blank"
+            rel="noopener"
+          >
+            <strong>Sitio web</strong>
+            <span>Conoce KAEN PRIVACY</span>
+          </a>
+
+          <!-- EDITAR: cambia por tu link de agenda -->
+          <a
+            class="action"
+            href="https://calendly.com/kaenprivacy"
+            target="_blank"
+            rel="noopener"
+          >
+            <strong>Agendar llamada</strong>
+            <span>Explorar talleres o programas</span>
+          </a>
+
+          <!-- EDITAR: sube tu brochure al repo o cambia el link -->
+          <a
+            class="action"
+            href="brochure-kaen-privacy.pdf"
+            target="_blank"
+            rel="noopener"
+          >
+            <strong>Brochure</strong>
+            <span>Descargar presentación ejecutiva</span>
+          </a>
+        </div>
+      </section>
+
+      <!-- ABOUT -->
+      <section class="section reveal delay-3" id="about">
+        <div class="section-title">
+          <h2>Sobre KAEN</h2>
+          <span>Claridad</span>
+        </div>
+
+        <p class="about-copy">
+          <strong>KAEN PRIVACY</strong> desarrolla talleres y programas de educación tecnológica enfocados en privacidad digital, conciencia digital, ciudadanía digital y uso responsable de la tecnología para contextos educativos, familiares y organizacionales.
+        </p>
+      </section>
+
+      <!-- SERVICES -->
+      <section class="section reveal delay-3" id="servicios">
+        <div class="section-title">
+          <h2>Servicios</h2>
+          <span>Sistemas educativos</span>
+        </div>
+
+        <div class="services-grid">
+
+          <div class="service">
+            <div class="service-icon">01</div>
+            <div>
+              <h3>Talleres educativos</h3>
+              <p>
+                Experiencias claras, prácticas y memorables sobre privacidad, datos y tecnología cotidiana.
+              </p>
+            </div>
+          </div>
+
+          <div class="service">
+            <div class="service-icon">02</div>
+            <div>
+              <h3>Escuelas</h3>
+              <p>
+                Programas para estudiantes, padres y docentes sobre cultura digital, riesgos y hábitos seguros.
+              </p>
+            </div>
+          </div>
+
+          <div class="service">
+            <div class="service-icon">03</div>
+            <div>
+              <h3>Familias</h3>
+              <p>
+                Guías y sesiones para tomar mejores decisiones digitales en casa sin miedo ni saturación.
+              </p>
+            </div>
+          </div>
+
+          <div class="service">
+            <div class="service-icon">04</div>
+            <div>
+              <h3>Organizaciones</h3>
+              <p>
+                Formación estratégica para equipos que necesitan elevar su cultura de privacidad y criterio digital.
+              </p>
+            </div>
+          </div>
+
+          <div class="service">
+            <div class="service-icon">05</div>
+            <div>
+              <h3>Privacidad digital</h3>
+              <p>
+                Educación práctica sobre huella digital, exposición, datos personales y decisiones informadas.
+              </p>
+            </div>
+          </div>
+
+          <div class="service">
+            <div class="service-icon">06</div>
+            <div>
+              <h3>Ciudadanía digital</h3>
+              <p>
+                Construcción de criterio, responsabilidad y conciencia en la vida digital diaria.
+              </p>
+            </div>
+          </div>
+
+        </div>
+      </section>
+
+      <!-- PRESENCE -->
+      <section class="section reveal delay-4" id="presencia">
+        <div class="presence">
+          <div class="presence-kicker">Presencia profesional</div>
+
+          <h3>Educación digital con criterio humano.</h3>
+
+          <p>
+            KAEN PRIVACY combina estrategia, pedagogía y diseño de experiencias para traducir temas complejos de privacidad en conversaciones claras, útiles y accionables.
+          </p>
+
+          <div class="proof-row">
+            <div class="proof-item">
+              <strong>01</strong>
+              <span>Enfoque educativo y preventivo</span>
+            </div>
+
+            <div class="proof-item">
+              <strong>02</strong>
+              <span>Lenguaje claro para audiencias reales</span>
+            </div>
+
+            <div class="proof-item">
+              <strong>03</strong>
+              <span>Privacidad aplicada a la vida cotidiana</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- FINAL CTA -->
+      <section class="final-cta reveal delay-4" id="contacto">
+        <h2>Construyamos una cultura digital más consciente.</h2>
+
+        <p>
+          Privacidad, tecnología y educación no deberían sentirse lejanos. Deben convertirse en criterio diario.
+        </p>
+
+        <!-- EDITAR: cambia el número por tu WhatsApp real -->
+        <a
+          class="cta-button"
+          href="https://wa.me/5210000000000?text=Hola%20KAEN%20PRIVACY,%20quiero%20agendar%20una%20llamada"
+          target="_blank"
+          rel="noopener"
+        >
+          Agendar conversación estratégica
+        </a>
+
+        <div class="footer-note">
+          KAEN PRIVACY · Digital Awareness
+        </div>
+      </section>
+    </article>
+
+    <!-- BOTONES FIJOS INFERIORES -->
+    <nav class="floating-save" aria-label="Acciones permanentes">
+
+      <!-- EDITAR: cambia por tu teléfono real -->
+      <a class="utility-btn" href="tel:+520000000000">
+        Llamar
+      </a>
+
+      <!-- EDITAR: cambia por tu correo real -->
+      <a class="utility-btn" href="mailto:hola@kaenprivacy.com?subject=Información%20KAEN%20PRIVACY">
+        Enviar correo
+      </a>
+    </nav>
+  </main>
+</body>
+</html>
